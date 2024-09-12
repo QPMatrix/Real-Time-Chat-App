@@ -1,4 +1,4 @@
-import { Resolver, Query, Context, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Context, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './entity/user.entity';
 import { Request } from 'express';
@@ -7,7 +7,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import * as GraphQlUpload from 'graphql-upload/graphqlUploadExpress.js';
+import { GraphQLUpload, FileUpload } from 'graphql-upload/GraphQLUpload';
 import * as process from 'node:process';
 
 @Resolver()
@@ -17,15 +17,15 @@ export class UserResolver {
   @Mutation(() => User)
   async updateProfile(
     @Args('fullname') fullname: string,
-    @Args('file', { type: () => GraphQlUpload, nullable: true })
-    file: GraphQlUpload.FileUpload,
+    @Args('file', { type: () => GraphQLUpload, nullable: true })
+    file: FileUpload,
     @Context() ctx: { req: Request },
   ) {
     const imgUrl = file ? await this.storeImageAndGetUrl(file) : null;
     const userId = ctx.req.user.sub;
     return this.userService.updateProfile(userId, fullname, imgUrl);
   }
-  private async storeImageAndGetUrl(file: GraphQlUpload.FileUpload) {
+  private async storeImageAndGetUrl(file: FileUpload) {
     const { createReadStream, filename } = await file;
     const uniqueFilename = `${uuidv4()}_${filename}`;
     const imgPath = join(
@@ -34,7 +34,7 @@ export class UserResolver {
     );
     const imgUrl = `${process.env.APP_URL}/${uniqueFilename}`;
     const readStream = createReadStream();
-    readStream.pipe(createReadStream(imgPath));
+    readStream.pipe(createWriteStream(imgPath));
     return imgUrl;
   }
 }
