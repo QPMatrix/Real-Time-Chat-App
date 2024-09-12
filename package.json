@@ -1,5 +1,10 @@
 {
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2"
+    "@types/bcrypt": "^5.0.2",
+    "@types/graphql-upload": "^16.0.7",
+    "@types/uuid": "^10.0.0"
+  },
+  "dependencies": {
+    "uuid": "^10.0.0"
   }
 }
