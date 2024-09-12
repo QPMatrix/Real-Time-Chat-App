@@ -71,7 +71,7 @@ export class AuthService {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
     });
-    return user;
+    return { user };
   }
   async validateUser(loginDto: LoginDto) {
     const user = await this.prisma.user.findUnique({
