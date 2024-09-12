@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Context, Args } from '@nestjs/graphql';
+import { Resolver, Mutation, Context, Query, Args } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { LoginResponse, RegisterResponse } from './types';
 import { LoginDto, RegisterDto } from './dto';
@@ -37,5 +37,9 @@ export class AuthResolver {
     } catch (e) {
       throw new BadRequestException(e.message);
     }
+  }
+  @Query(() => String)
+  async hello() {
+    return 'Hello';
   }
 }
