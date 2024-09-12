@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id              Int             @id @default(autoincrement())
+  id              String          @id @default(cuid())
   fullname        String
   avatarUrl       String?
   email           String          @unique
@@ -23,7 +23,7 @@ model User {
 }
 
 model Chatroom {
-  id            Int             @id @default(autoincrement())
+  id            String          @id @default(cuid())
   name          String
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -33,11 +33,11 @@ model Chatroom {
 }
 
 model Message {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(cuid())
   content    String
   imageUrl   String?
-  userId     Int
-  chatroomId Int
+  userId     String
+  chatroomId String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -45,8 +45,8 @@ model Message {
 }
 
 model ChatroomUsers {
-  chatroomId Int
-  userId     Int
+  chatroomId String
+  userId     String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)

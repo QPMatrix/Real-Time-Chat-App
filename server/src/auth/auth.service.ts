@@ -49,8 +49,8 @@ export class AuthService {
       { secret: this.configService.getOrThrow<string>('ACCESS_TOKEN_SECRET') },
     );
     res.cookie('access-token', accessToken, {
-      maxAge: expireIn * 1000,
-      httpOnly: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
     });
   }
   private async issueTokens(user: User, res: Response) {
@@ -64,10 +64,12 @@ export class AuthService {
       expiresIn: '7d',
     });
     res.cookie('refresh-token', refreshToken, {
-      httpOnly: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
     });
     res.cookie('access-token', accessToken, {
-      httpOnly: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
     });
     return user;
   }
@@ -78,7 +80,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const isPasswordValid = await bcrypt.validate(
+    const isPasswordValid = await bcrypt.compare(
       user.password,
       loginDto.password,
     );
