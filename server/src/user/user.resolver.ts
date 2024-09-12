@@ -7,8 +7,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { GraphQLUpload, FileUpload } from 'graphql-upload/GraphQLUpload';
-import * as process from 'node:process';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 
 @Resolver()
 export class UserResolver {
@@ -18,14 +17,14 @@ export class UserResolver {
   async updateProfile(
     @Args('fullname') fullname: string,
     @Args('file', { type: () => GraphQLUpload, nullable: true })
-    file: FileUpload,
+    file: GraphQLUpload.FileUpload,
     @Context() ctx: { req: Request },
   ) {
     const imgUrl = file ? await this.storeImageAndGetUrl(file) : null;
     const userId = ctx.req.user.sub;
     return this.userService.updateProfile(userId, fullname, imgUrl);
   }
-  private async storeImageAndGetUrl(file: FileUpload) {
+  private async storeImageAndGetUrl(file: GraphQLUpload.FileUpload) {
     const { createReadStream, filename } = await file;
     const uniqueFilename = `${uuidv4()}_${filename}`;
     const imgPath = join(
