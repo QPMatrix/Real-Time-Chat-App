@@ -16,6 +16,7 @@
     "@mantine/form": "^7.12.2",
     "@mantine/hooks": "^7.12.2",
     "@mantine/modals": "^7.12.2",
+    "@swc/core": "^1.7.26",
     "apollo-upload-client": "^17.0.0",
     "graphql": "^16.9.0",
     "react": "^18.3.1",
