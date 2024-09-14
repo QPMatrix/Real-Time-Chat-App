@@ -17,7 +17,7 @@ import { createUploadLink } from 'apollo-upload-client';
 loadErrorMessages();
 loadDevMessages();
 
-const { VITE_APP_API_URL } = import.meta.env; // Correct way to access environment variables in Vite
+const { VITE_APP_API_URL } = import.meta.env;
 
 async function refreshToken(client: ApolloClient<NormalizedCacheObject>) {
   try {
