@@ -26,7 +26,10 @@ const pubSub = new RedisPubSub({
       imports: [ConfigModule, AppModule],
       inject: [ConfigService],
       driver: ApolloDriver,
-      useFactory: async (configService: ConfigService) => {
+      useFactory: async (
+        configService: ConfigService,
+        tokenService: TokenService,
+      ) => {
         return {
           installSubscriptionHandlers: true,
           playground: configService.getOrThrow('NODE_ENV') === 'development',
@@ -35,6 +38,17 @@ const pubSub = new RedisPubSub({
           subscriptions: {
             'graphql-ws': true,
             'subscriptions-transport-ws': true,
+          },
+          onConnect: async (connectionParams) => {
+            const token = tokenService.extractToken(connectionParams);
+            if (!token) {
+              throw new Error('Missing token');
+            }
+            const user = tokenService.validateToken(token);
+            if (!user) {
+              throw new Error('Invalid token');
+            }
+            return { user };
           },
         };
       },
