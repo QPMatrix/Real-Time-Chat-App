@@ -8,11 +8,11 @@ import {
   split,
 } from "@apollo/client";
 import { WebSocketLink } from "@apollo/client/link/ws";
-import { createUploadLink } from "apollo-upload-client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 import { useUserStore } from './store/user-store';
 import { onError } from "@apollo/client/link/error";
+import { createUploadLink } from 'apollo-upload-client';
 
 loadErrorMessages();
 loadDevMessages();
@@ -34,12 +34,13 @@ async function refreshToken(client: ApolloClient<NormalizedCacheObject>) {
     }
     return `Bearer ${newAccessToken}`;
   } catch (err) {
+    console.log(err)
     throw new Error("Error getting new access token.");
   }
 }
 
 const wsLink = new WebSocketLink({
-  uri: `ws://${VITE_APP_API_URL}/graphql`, // Use VITE_APP_API_URL here
+  uri: `ws://${VITE_APP_API_URL}/graphql`,
   options: {
     reconnect: true,
     connectionParams: {
@@ -91,7 +92,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
         console.log("Refresh token not found!");
         useUserStore.setState({
           id: undefined,
-          fullname: "",
+          fullName: "",
           email: "",
         });
       }
@@ -100,7 +101,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
 });
 
 const uploadLink = createUploadLink({
-  uri: `http://${VITE_APP_API_URL}/graphql`, // Use VITE_APP_API_URL here
+  uri: `${VITE_APP_API_URL}/graphql`,
   credentials: "include",
   headers: {
     "apollo-require-preflight": "true",
