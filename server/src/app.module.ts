@@ -18,7 +18,7 @@ import { join } from 'path';
       useFactory: async (configService: ConfigService) => {
         return {
           playground: configService.getOrThrow('NODE_ENV') === 'development',
-          autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+          autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
           sortSchema: true,
         };
       },
