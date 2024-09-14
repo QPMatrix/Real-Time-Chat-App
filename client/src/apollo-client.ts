@@ -101,7 +101,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
 });
 
 const uploadLink = createUploadLink({
-  uri: `${VITE_APP_API_URL}/graphql`,
+  uri: `http://${VITE_APP_API_URL}/graphql`,
   credentials: "include",
   headers: {
     "apollo-require-preflight": "true",
