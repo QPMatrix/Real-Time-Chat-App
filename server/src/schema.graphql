@@ -21,7 +21,7 @@ type Mutation {
   logout: String!
   refreshToken: String!
   register(registerInput: RegisterDto!): RegisterResponse!
-  updateProfile(file: Upload, fullname: String!): User!
+  updateProfile(file: Upload, fullName: String!): User!
 }
 
 type Query {
@@ -31,7 +31,7 @@ type Query {
 input RegisterDto {
   confirmPassword: String!
   email: String!
-  fullname: String!
+  fullName: String!
   password: String!
 }
 

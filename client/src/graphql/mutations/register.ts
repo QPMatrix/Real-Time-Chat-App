@@ -9,7 +9,7 @@ export const REGISTER_MUTATION = gql`
   ) {
     register(
       registerInput: {
-        fullname: $fullname
+        fullName: $fullname
         email: $email
         password: $password
         confirmPassword: $confirmPassword

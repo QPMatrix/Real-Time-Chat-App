@@ -6,7 +6,7 @@ export class RegisterDto {
   @Field()
   @IsNotEmpty({ message: 'Fullname is required.' })
   @IsString({ message: 'Fullname must be a string.' })
-  fullname: string;
+  fullName: string;
 
   @Field()
   @IsNotEmpty({ message: 'Password is required.' })

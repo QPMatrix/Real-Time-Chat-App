@@ -15,14 +15,14 @@ export class UserResolver {
   @UseGuards(JwtAuthGuard)
   @Mutation(() => User)
   async updateProfile(
-    @Args('fullname') fullname: string,
+    @Args('fullName') fullName: string,
     @Args('file', { type: () => GraphQLUpload, nullable: true })
     file: GraphQLUpload.FileUpload,
     @Context() ctx: { req: Request },
   ) {
     const imgUrl = file ? await this.storeImageAndGetUrl(file) : null;
     const userId = ctx.req.user.sub;
-    return this.userService.updateProfile(userId, fullname, imgUrl);
+    return this.userService.updateProfile(userId, fullName, imgUrl);
   }
   private async storeImageAndGetUrl(file: GraphQLUpload.FileUpload) {
     const { createReadStream, filename } = await file;

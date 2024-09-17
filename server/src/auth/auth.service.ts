@@ -31,6 +31,7 @@ export class AuthService {
         secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
       });
     } catch (error) {
+      console.log(error);
       throw new UnauthorizedException('Invalid or expired refresh token');
     }
     const userExists = await this.prisma.user.findUnique({
@@ -54,7 +55,7 @@ export class AuthService {
     return accessToken;
   }
   private async issueTokens(user: User, response: Response) {
-    const payload = { username: user.fullname, sub: user.id };
+    const payload = { username: user.fullName, sub: user.id };
 
     const accessToken = this.jwtService.sign(
       { ...payload },
@@ -94,7 +95,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
     const user = await this.prisma.user.create({
       data: {
-        fullname: registerDto.fullname,
+        fullName: registerDto.fullName,
         password: hashedPassword,
         email: registerDto.email,
       },
