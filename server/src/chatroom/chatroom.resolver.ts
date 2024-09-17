@@ -40,8 +40,10 @@ export class ChatroomResolver {
     return this.chatroomService.getMessages(chatRoomId);
   }
   @Mutation(() => String)
-  async deleteChatRoom(@Args('chatRoomId') chatRoomId: string) {
+  async deleteChatRoom(
+    @Args('chatRoomId') chatRoomId: string,
+  ): Promise<string> {
     await this.chatroomService.deleteChatRoom(chatRoomId);
-    return { messages: 'Chatroom deleted' };
+    return 'Chatroom deleted';
   }
 }
