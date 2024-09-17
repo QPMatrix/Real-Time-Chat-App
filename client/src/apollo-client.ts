@@ -39,6 +39,12 @@ async function refreshToken(client: ApolloClient<NormalizedCacheObject>) {
   }
 }
 
+// Initialize the client before it's used in the errorLink
+export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.from([]), // Temporary placeholder; we'll update this later
+});
+
 const wsLink = new WebSocketLink({
   uri: `ws://${VITE_APP_API_URL}/graphql`,
   options: {
@@ -59,8 +65,6 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
         retryCount++;
 
         return new Observable((observer) => {
-          const client = operation.getContext().client;
-
           refreshToken(client)
             .then((token) => {
               console.log('New token', token);
@@ -120,7 +124,7 @@ const link = split(
   ApolloLink.from([errorLink, uploadLink])
 );
 
-export const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link,
-});
+// Now, update the client with the correct link chain
+client.setLink(link);
+
+export default client;

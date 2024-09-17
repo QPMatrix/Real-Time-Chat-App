@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { User } from './entity/user.entity';
 import { Request } from 'express';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { GraphqlAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +12,7 @@ import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(GraphqlAuthGuard)
   @Mutation(() => User)
   async updateProfile(
     @Args('fullName') fullName: string,
