@@ -42,6 +42,6 @@ export class ChatroomResolver {
   @Mutation(() => String)
   async deleteChatRoom(@Args('chatRoomId') chatRoomId: string) {
     await this.chatroomService.deleteChatRoom(chatRoomId);
-    return 'Chatroom deleted';
+    return { messages: 'Chatroom deleted' };
   }
 }
