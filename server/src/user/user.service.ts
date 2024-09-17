@@ -44,4 +44,27 @@ export class UserService {
 
     return updatedUser;
   }
+  async searchUsers(fullName: string, userId: string) {
+    return this.prisma.user.findMany({
+      where: {
+        fullName: {
+          contains: fullName,
+        },
+        id: {
+          not: userId,
+        },
+      },
+    });
+  }
+  async getUsersOfChatroom(chatRoomId: string) {
+    return this.prisma.user.findMany({
+      where: {
+        chatrooms: {
+          some: {
+            id: chatRoomId,
+          },
+        },
+      },
+    });
+  }
 }

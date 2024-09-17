@@ -49,7 +49,9 @@ type Mutation {
 type Query {
   getChatRoomForUser(userId: String!): [Chatroom!]!
   getMessagesForChatRoom(chatRoomId: String!): [Message!]!
+  getUsersOfChatroom(chatRoomId: String!): [User!]!
   hello: String!
+  searchUsers(fullName: String!): [User!]!
 }
 
 input RegisterDto {

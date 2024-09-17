@@ -1,4 +1,4 @@
-import { Resolver, Context, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Context, Mutation, Args, Query } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './entity/user.entity';
 import { Request } from 'express';
@@ -44,5 +44,19 @@ export class UserResolver {
     readStream.pipe(createWriteStream(imgPath));
 
     return imgUrl;
+  }
+  @UseGuards(GraphqlAuthGuard)
+  @Query(() => [User])
+  async searchUsers(
+    @Args('fullName') fullName: string,
+    @Context() ctx: { req: Request },
+  ) {
+    const userId = ctx.req.user.sub;
+    return this.userService.searchUsers(fullName, userId);
+  }
+  @UseGuards(GraphqlAuthGuard)
+  @Query(() => [User])
+  getUsersOfChatroom(@Args('chatRoomId') chatRoomId: string) {
+    return this.userService.getUsersOfChatroom(chatRoomId);
   }
 }
