@@ -47,11 +47,12 @@ const ProfileSettings = () => {
       file: imageFile,
     },
     onCompleted: (data) => {
-      updateUsername(data.updatedProfile.fullName);
-      updateProfileImage(data.updatedProfile.avatarUrl);
+      updateUsername(data.updateProfile.fullName);
+      updateProfileImage(data.updateProfile.avatarUrl);
     },
   });
   const handleSave = async () => {
+    if (form.validate().hasErrors) return;
     await updatedProfile().then(() => {
       toggleProfileModal();
     });
@@ -106,6 +107,7 @@ const ProfileSettings = () => {
           onChange={(e) => {
             form.setFieldValue('username', e.currentTarget.value);
           }}
+          error={form.errors.username}
         />
       </form>
       <Flex gap="md" mt="sm">
