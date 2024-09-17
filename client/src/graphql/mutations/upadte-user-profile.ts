@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const UPDATE_USER_PROFILE_MUTATION = gql`
-  mutation UpdateProfile($fullname: String!, $file: Upload) {
-    updateProfile(fullname: $fullname, file: $file) {
+  mutation UpdateProfile($fullName: String!, $file: Upload) {
+    updateProfile(fullName: $fullName, file: $file) {
       id
       fullName
       avatarUrl

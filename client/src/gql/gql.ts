@@ -16,7 +16,7 @@ const documents = {
     "\n  mutation LoginUser($email: String!, $password: String!) {\n    login(loginInput: { email: $email, password: $password }) {\n      user {\n        email\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": types.LoginUserDocument,
     "\n  mutation LogoutUser {\n    logout\n  }\n": types.LogoutUserDocument,
     "\n  mutation RegisterUser(\n    $fullname: String!\n    $email: String!\n    $password: String!\n    $confirmPassword: String!\n  ) {\n    register(\n      registerInput: {\n        fullName: $fullname\n        email: $email\n        password: $password\n        confirmPassword: $confirmPassword\n      }\n    ) {\n      user {\n        id\n        fullName\n        email\n      }\n    }\n  }\n": types.RegisterUserDocument,
-    "\n  mutation UpdateProfile($fullname: String!, $file: Upload) {\n    updateProfile(fullname: $fullname, file: $file) {\n      id\n      fullName\n      avatarUrl\n    }\n  }\n": types.UpdateProfileDocument,
+    "\n  mutation UpdateProfile($fullName: String!, $file: Upload) {\n    updateProfile(fullName: $fullName, file: $file) {\n      id\n      fullName\n      avatarUrl\n    }\n  }\n": types.UpdateProfileDocument,
 };
 
 /**
@@ -48,7 +48,7 @@ export function graphql(source: "\n  mutation RegisterUser(\n    $fullname: Stri
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation UpdateProfile($fullname: String!, $file: Upload) {\n    updateProfile(fullname: $fullname, file: $file) {\n      id\n      fullName\n      avatarUrl\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateProfile($fullname: String!, $file: Upload) {\n    updateProfile(fullname: $fullname, file: $file) {\n      id\n      fullName\n      avatarUrl\n    }\n  }\n"];
+export function graphql(source: "\n  mutation UpdateProfile($fullName: String!, $file: Upload) {\n    updateProfile(fullName: $fullName, file: $file) {\n      id\n      fullName\n      avatarUrl\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateProfile($fullName: String!, $file: Upload) {\n    updateProfile(fullName: $fullName, file: $file) {\n      id\n      fullName\n      avatarUrl\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
