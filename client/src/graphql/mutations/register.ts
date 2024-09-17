@@ -8,12 +8,7 @@ export const REGISTER_MUTATION = gql`
     $confrimPassword: String!
   ) {
     register(
-      registerInput: {
-        fullname: $fullname
-        email: $email
-        password: $password
-        confirmPassword: $confrimPassword
-      }
+      registerInput: { fullname: $fullname, email: $email, password: $password }
     ) {
       user {
         email

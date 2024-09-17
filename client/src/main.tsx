@@ -1,6 +1,5 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
 import './index.css';
 import { MantineProvider } from '@mantine/core';
 import { ApolloProvider } from '@apollo/client';
@@ -19,7 +18,6 @@ createRoot(document.getElementById('root')!).render(
     <MantineProvider>
       <ApolloProvider client={client}>
         <RouterProvider router={router} />
-        <App />
       </ApolloProvider>
     </MantineProvider>
   </StrictMode>
