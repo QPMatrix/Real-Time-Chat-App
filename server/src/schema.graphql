@@ -29,6 +29,7 @@ type Query {
 }
 
 input RegisterDto {
+  confirmPassword: String!
   email: String!
   fullname: String!
   password: String!

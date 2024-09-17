@@ -5,15 +5,20 @@ export const REGISTER_MUTATION = gql`
     $fullname: String!
     $email: String!
     $password: String!
-    $confrimPassword: String!
+    $confirmPassword: String!
   ) {
     register(
-      registerInput: { fullname: $fullname, email: $email, password: $password }
+      registerInput: {
+        fullname: $fullname
+        email: $email
+        password: $password
+        confirmPassword: $confirmPassword
+      }
     ) {
       user {
-        email
         id
         fullName
+        email
       }
     }
   }

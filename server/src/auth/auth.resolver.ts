@@ -1,45 +1,53 @@
-import { Resolver, Mutation, Context, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { LoginResponse, RegisterResponse } from './types';
 import { LoginDto, RegisterDto } from './dto';
+import { BadRequestException, UseFilters } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { BadRequestException } from '@nestjs/common';
+import { GraphQLErrorFilter } from '../filters/custom-exception';
 
+@UseFilters(GraphQLErrorFilter)
 @Resolver()
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
+
   @Mutation(() => RegisterResponse)
   async register(
     @Args('registerInput') registerDto: RegisterDto,
-    @Context() ctx: { res: Response },
+    @Context() context: { res: Response },
   ) {
     if (registerDto.password !== registerDto.confirmPassword) {
-      throw new BadRequestException('Passwords do not match');
+      throw new BadRequestException({
+        confirmPassword: 'Password and confirm password are not the same.',
+      });
     }
-    const { user } = await this.authService.register(registerDto, ctx.res);
+    const { user } = await this.authService.register(registerDto, context.res);
     return { user };
   }
+
   @Mutation(() => LoginResponse)
   async login(
     @Args('loginInput') loginDto: LoginDto,
-    @Context() ctx: { res: Response },
+    @Context() context: { res: Response },
   ) {
-    return this.authService.login(loginDto, ctx.res);
+    return this.authService.login(loginDto, context.res);
   }
+
   @Mutation(() => String)
-  async logout(@Context() ctx: { res: Response }) {
-    return this.authService.logOut(ctx.res);
+  async logout(@Context() context: { res: Response }) {
+    return this.authService.logout(context.res);
   }
-  @Mutation(() => String)
-  async refreshToken(@Context() ctx: { res: Response; req: Request }) {
-    try {
-      return this.authService.refreshToken(ctx.req, ctx.res);
-    } catch (e) {
-      throw new BadRequestException(e.message);
-    }
-  }
+
   @Query(() => String)
   async hello() {
-    return 'Hello';
+    return 'hello';
+  }
+  @Mutation(() => String)
+  async refreshToken(@Context() context: { req: Request; res: Response }) {
+    try {
+      return this.authService.refreshToken(context.req, context.res);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
