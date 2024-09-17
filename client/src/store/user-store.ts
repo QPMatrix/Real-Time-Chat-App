@@ -3,20 +3,19 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface UserState {
-  id: string | undefined;
+  id: string | null;
   avatarUrl: string | null;
   fullName: string;
   email?: string;
   updateProfileImage: (img: string) => void;
   updateProfile: (fullname: string) => void;
   setUserData: (data: User) => void;
-
 }
 
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      id: undefined,
+      id: null,
       avatarUrl: null,
       fullName: '',
       email: '',
@@ -36,6 +35,7 @@ export const useUserStore = create<UserState>()(
       },
     }),
     {
-      name: 'user-storage',
-    }),
+      name: 'user-store',
+    }
+  )
 );

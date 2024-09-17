@@ -16,11 +16,19 @@ export const useGeneralStore = create<GeneralState>()(
       isCreateRoomModalOpen: false,
       isLoginModalOpen: false,
       isProfileSettingsOpen: false,
-      toggleCreateRoomModal: () => set((state) => ({ isCreateRoomModalOpen: !state.isCreateRoomModalOpen })),
-      toggleLoginModal: () => set((state) => ({ isLoginModalOpen: !state.isLoginModalOpen })),
-      toggleProfileSettings: () => set((state) => ({ isProfileSettingsOpen: !state.isProfileSettingsOpen })),
-    }), {
-      name: 'general-storage',
-    },
-  ),
+      toggleCreateRoomModal: () =>
+        set((state) => ({
+          isCreateRoomModalOpen: !state.isCreateRoomModalOpen,
+        })),
+      toggleLoginModal: () =>
+        set((state) => ({ isLoginModalOpen: !state.isLoginModalOpen })),
+      toggleProfileSettings: () =>
+        set((state) => ({
+          isProfileSettingsOpen: !state.isProfileSettingsOpen,
+        })),
+    }),
+    {
+      name: 'general-store',
+    }
+  )
 );

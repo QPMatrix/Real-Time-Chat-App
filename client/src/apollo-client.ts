@@ -6,12 +6,12 @@ import {
   Observable,
   ApolloLink,
   split,
-} from "@apollo/client";
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { getMainDefinition } from "@apollo/client/utilities";
-import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+} from '@apollo/client';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { useUserStore } from './store/user-store';
-import { onError } from "@apollo/client/link/error";
+import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
 
 loadErrorMessages();
@@ -23,19 +23,19 @@ async function refreshToken(client: ApolloClient<NormalizedCacheObject>) {
   try {
     const { data } = await client.mutate({
       mutation: gql`
-          mutation RefreshToken {
-              refreshToken
-          }
+        mutation RefreshToken {
+          refreshToken
+        }
       `,
     });
     const newAccessToken = data?.refreshToken;
     if (!newAccessToken) {
-      throw new Error("New access token not received.");
+      throw new Error('New access token not received.');
     }
     return `Bearer ${newAccessToken}`;
   } catch (err) {
-    console.log(err)
-    throw new Error("Error getting new access token.");
+    console.log(err);
+    throw new Error('Error getting new access token.');
   }
 }
 
@@ -44,7 +44,7 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     connectionParams: {
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     },
   },
 });
@@ -55,7 +55,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
 
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
-      if (err.extensions?.code === "UNAUTHENTICATED" && retryCount < maxRetry) {
+      if (err.extensions?.code === 'UNAUTHENTICATED' && retryCount < maxRetry) {
         retryCount++;
 
         return new Observable((observer) => {
@@ -63,7 +63,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
 
           refreshToken(client)
             .then((token) => {
-              console.log("New token", token);
+              console.log('New token', token);
 
               // Update the operation context with the new token
               operation.setContext(({ headers = {} }) => ({
@@ -82,18 +82,18 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
               });
             })
             .catch((error) => {
-              console.error("Failed to refresh token", error);
+              console.error('Failed to refresh token', error);
               observer.error(error);
             });
         });
       }
 
-      if (err.message === "Refresh token not found") {
-        console.log("Refresh token not found!");
+      if (err.message === 'Refresh token not found') {
+        console.log('Refresh token not found!');
         useUserStore.setState({
           id: undefined,
-          fullName: "",
-          email: "",
+          fullName: '',
+          email: '',
         });
       }
     }
@@ -102,9 +102,9 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
 
 const uploadLink = createUploadLink({
   uri: `http://${VITE_APP_API_URL}/graphql`,
-  credentials: "include",
+  credentials: 'include',
   headers: {
-    "apollo-require-preflight": "true",
+    'apollo-require-preflight': 'true',
   },
 });
 
@@ -112,8 +112,8 @@ const link = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
     );
   },
   wsLink,
